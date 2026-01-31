@@ -46,6 +46,7 @@ const Navbar = ({ user }) => {
           </div>
 
           <div className="flex items-center gap-4">
+            <Reminders />
             <div className="flex items-center gap-2 glass-heavy rounded-full px-4 py-2" data-testid="navbar-coins">
               <Coins className="w-4 h-4 text-amber-500" />
               <span className="font-semibold text-slate-900">{user?.coins || 0}</span>
