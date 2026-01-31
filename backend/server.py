@@ -120,9 +120,12 @@ class DetailedRating(BaseModel):
     helpfulness: int
     feedback: Optional[str] = None
 
-class ChatMessage(BaseModel):
-    message: str
-    session_id: Optional[str] = None
+class NotificationSettings(BaseModel):
+    session_reminders: bool = True
+    quiz_achievements: bool = True
+    coin_earned: bool = True
+    ai_tips: bool = True
+    urgent_only: bool = False
 
 class RewardRedemption(BaseModel):
     reward_id: str
