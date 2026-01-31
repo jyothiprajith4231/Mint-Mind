@@ -31,13 +31,20 @@ const Store = () => {
 
   const handleRedeem = async (rewardId, coinCost) => {
     if (user.coins < coinCost) {
-      toast.error('Insufficient coins!');
+      toast.error('Insufficient coins!', {
+        description: `You need ${coinCost - user.coins} more coins`,
+        duration: 4000
+      });
       return;
     }
 
     try {
       await api.post('/rewards/redeem', { reward_id: rewardId });
-      toast.success('Reward redeemed successfully!');
+      toast.success('Reward redeemed successfully!', {
+        description: 'Your reward will be delivered soon!',
+        duration: 5000,
+        icon: '🎁'
+      });
       await fetchData();
     } catch (error) {
       toast.error('Failed to redeem reward');
