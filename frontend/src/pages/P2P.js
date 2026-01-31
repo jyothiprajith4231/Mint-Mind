@@ -91,7 +91,11 @@ const P2P = () => {
   const handleRateSession = async () => {
     try {
       await api.post('/p2p/sessions/rate', ratingData);
-      toast.success(`Session rated! Earned ${res.data.coins_earned} coins!`);
+      toast.success(`Session rated! Earned 10 coins!`, {
+        description: 'Thank you for your feedback!',
+        duration: 5000,
+        icon: '🪙'
+      });
       setShowRateSession(false);
       setRatingData({
         session_id: '',
