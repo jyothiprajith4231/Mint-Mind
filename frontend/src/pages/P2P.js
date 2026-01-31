@@ -18,7 +18,14 @@ const P2P = () => {
   const [selectedMentor, setSelectedMentor] = useState(null);
   const [bookingData, setBookingData] = useState({ skill: '', scheduled_at: '' });
   const [showRateSession, setShowRateSession] = useState(false);
-  const [ratingData, setRatingData] = useState({ session_id: '', rating: 5, feedback: '' });
+  const [ratingData, setRatingData] = useState({
+    session_id: '',
+    overall_rating: 5,
+    punctuality: 5,
+    knowledge: 5,
+    helpfulness: 5,
+    feedback: ''
+  });
 
   useEffect(() => {
     fetchData();
