@@ -233,7 +233,7 @@ const P2P = () => {
                     {session.rating && (
                       <div className="flex items-center gap-1 text-amber-500">
                         <Star className="w-4 h-4 fill-current" />
-                        <span className="text-sm font-medium">{session.rating}/5</span>
+                        <span className="text-sm font-medium">{session.overall_rating}/5</span>
                       </div>
                     )}
                   </div>
