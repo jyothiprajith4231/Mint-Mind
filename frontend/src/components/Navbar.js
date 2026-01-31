@@ -16,7 +16,8 @@ const Navbar = ({ user }) => {
     { label: 'Courses', path: '/courses' },
     { label: 'P2P Learning', path: '/p2p' },
     { label: 'Leaderboard', path: '/leaderboard' },
-    { label: 'Store', path: '/store' }
+    { label: 'Store', path: '/store' },
+    { label: 'Settings', path: '/settings/notifications' }
   ];
 
   return (
