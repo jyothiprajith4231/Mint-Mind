@@ -315,32 +315,85 @@ const P2P = () => {
       </Dialog>
 
       <Dialog open={showRateSession} onOpenChange={setShowRateSession}>
-        <DialogContent className="glass-heavy" data-testid="rate-session-dialog">
+        <DialogContent className="glass-heavy max-w-md" data-testid="rate-session-dialog">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-slate-900">Rate Session</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="rating" className="text-slate-700 font-medium">Rating (1-5)</Label>
-              <Input
-                id="rating"
-                type="number"
-                min="1"
-                max="5"
-                value={ratingData.rating}
-                onChange={(e) => setRatingData({ ...ratingData, rating: parseInt(e.target.value) })}
-                className="mt-2 bg-white/50 border-slate-200 focus:border-violet-500 focus:ring-violet-500/20 rounded-xl h-12"
-                data-testid="rating-input"
-              />
+          <div className="space-y-6 mt-4">
+            <div className="space-y-4">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-slate-700 font-medium">Overall Rating</Label>
+                  <span className="text-2xl font-bold text-violet-600">{ratingData.overall_rating}/5</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={ratingData.overall_rating}
+                  onChange={(e) => setRatingData({ ...ratingData, overall_rating: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-600"
+                  data-testid="overall-rating-slider"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-slate-700 font-medium">Punctuality</Label>
+                  <span className="text-lg font-semibold text-slate-600">{ratingData.punctuality}/5</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={ratingData.punctuality}
+                  onChange={(e) => setRatingData({ ...ratingData, punctuality: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-600"
+                  data-testid="punctuality-rating-slider"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-slate-700 font-medium">Knowledge</Label>
+                  <span className="text-lg font-semibold text-slate-600">{ratingData.knowledge}/5</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={ratingData.knowledge}
+                  onChange={(e) => setRatingData({ ...ratingData, knowledge: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-600"
+                  data-testid="knowledge-rating-slider"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-slate-700 font-medium">Helpfulness</Label>
+                  <span className="text-lg font-semibold text-slate-600">{ratingData.helpfulness}/5</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={ratingData.helpfulness}
+                  onChange={(e) => setRatingData({ ...ratingData, helpfulness: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-600"
+                  data-testid="helpfulness-rating-slider"
+                />
+              </div>
             </div>
+
             <div>
-              <Label htmlFor="feedback" className="text-slate-700 font-medium">Feedback (Optional)</Label>
-              <Input
+              <Label htmlFor="feedback" className="text-slate-700 font-medium">Feedback</Label>
+              <textarea
                 id="feedback"
                 value={ratingData.feedback}
                 onChange={(e) => setRatingData({ ...ratingData, feedback: e.target.value })}
-                className="mt-2 bg-white/50 border-slate-200 focus:border-violet-500 focus:ring-violet-500/20 rounded-xl h-12"
-                placeholder="Share your experience"
+                className="mt-2 w-full bg-white/50 border-slate-200 focus:border-violet-500 focus:ring-violet-500/20 rounded-xl p-3 min-h-[100px] resize-none"
+                placeholder="Share your experience with this mentor..."
                 data-testid="feedback-input"
               />
             </div>
