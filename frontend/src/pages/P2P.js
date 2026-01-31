@@ -66,7 +66,20 @@ const P2P = () => {
         skill: bookingData.skill,
         scheduled_at: bookingData.scheduled_at
       });
-      toast.success('Session booked successfully!');
+      toast.success('Session booked successfully!', {
+        description: `Your session with ${selectedMentor.name} has been scheduled.`,
+        duration: 5000
+      });
+      
+      // Send notification about upcoming session
+      const sessionDate = new Date(bookingData.scheduled_at);
+      const timeUntil = Math.round((sessionDate - new Date()) / (1000 * 60 * 60));
+      if (timeUntil <= 24) {
+        toast.info(`🔔 Reminder: Session starts in ${timeUntil} hours`, {
+          duration: 6000
+        });
+      }
+      
       setShowBookSession(false);
       setBookingData({ skill: '', scheduled_at: '' });
       await fetchData();
