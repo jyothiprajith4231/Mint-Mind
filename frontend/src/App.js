@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { useState, useEffect } from 'react';
+import AIAssistant from '@/components/AIAssistant';
 import Landing from '@/pages/Landing';
 import Auth from '@/pages/Auth';
 import Dashboard from '@/pages/Dashboard';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/store" element={<ProtectedRoute><Store /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
+        {token && <AIAssistant />}
       </BrowserRouter>
       <Toaster position="top-right" />
     </div>
