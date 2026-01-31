@@ -11,6 +11,7 @@ import P2P from '@/pages/P2P';
 import Leaderboard from '@/pages/Leaderboard';
 import Store from '@/pages/Store';
 import Profile from '@/pages/Profile';
+import NotificationSettings from '@/pages/NotificationSettings';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -40,10 +41,11 @@ function App() {
           <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
           <Route path="/store" element={<ProtectedRoute><Store /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
         </Routes>
         {token && <AIAssistant />}
       </BrowserRouter>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors />
     </div>
   );
 }
