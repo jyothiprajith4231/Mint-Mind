@@ -146,9 +146,9 @@ async def get_notification_settings(user=Depends(get_current_user)):
             'ai_tips': True,
             'urgent_only': False
         }
-        await db.notification_settings.insert_one(default_settings)
-        return {k: v for k, v in default_settings.items() if k != 'user_id'}
-    return {k: v for k, v in settings.items() if k != 'user_id'}
+        await db.notification_settings.insert_one({**default_settings})
+        return {k: v for k, v in default_settings.items() if k != 'user_id' and k != '_id'}
+    return {k: v for k, v in settings.items() if k != 'user_id' and k != '_id'}
 
 @api_router.post('/notifications/settings')
 async def update_notification_settings(settings: NotificationSettings, user=Depends(get_current_user)):
