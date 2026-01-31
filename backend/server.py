@@ -112,6 +112,18 @@ class SessionRating(BaseModel):
     rating: int
     feedback: Optional[str] = None
 
+class DetailedRating(BaseModel):
+    session_id: str
+    overall_rating: int
+    punctuality: int
+    knowledge: int
+    helpfulness: int
+    feedback: Optional[str] = None
+
+class ChatMessage(BaseModel):
+    message: str
+    session_id: Optional[str] = None
+
 class RewardRedemption(BaseModel):
     reward_id: str
 
