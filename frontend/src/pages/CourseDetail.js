@@ -72,12 +72,19 @@ const CourseDetail = () => {
       });
 
       if (res.data.passed) {
-        toast.success(`Quiz passed! Earned ${res.data.coins_earned} coins!`);
+        toast.success(`Quiz passed! Earned ${res.data.coins_earned} coins!`, {
+          description: `Score: ${Math.round(res.data.score)}%`,
+          duration: 5000,
+          icon: '🎉'
+        });
         await fetchData();
         setShowQuiz(false);
         setQuizAnswers({});
       } else {
-        toast.error(`Score: ${Math.round(res.data.score)}%. Need 70% to pass.`);
+        toast.error(`Score: ${Math.round(res.data.score)}%. Need 70% to pass.`, {
+          description: 'Review the material and try again!',
+          duration: 5000
+        });
       }
     } catch (error) {
       toast.error('Quiz submission failed');
