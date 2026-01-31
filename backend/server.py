@@ -434,6 +434,71 @@ async def get_ai_recommendations(user=Depends(get_current_user)):
     except Exception as e:
         return {'recommendations': 'Keep learning! Explore our course catalog to discover new skills.'}
 
+@api_router.get('/reminders')
+async def get_reminders(user=Depends(get_current_user)):
+    from datetime import timedelta
+    now = datetime.now(timezone.utc)
+    next_24h = now + timedelta(hours=24)
+    
+    upcoming_sessions = await db.p2p_sessions.find({
+        '$or': [
+            {'mentor_id': user['id']},
+            {'learner_id': user['id']}
+        ],
+        'status': 'scheduled'
+    }, {'_id': 0}).to_list(100)
+    
+    reminders = []
+    for session in upcoming_sessions:
+        scheduled = datetime.fromisoformat(session['scheduled_at'])
+        if now <= scheduled <= next_24h:
+            time_until = scheduled - now
+            hours = int(time_until.total_seconds() / 3600)
+            reminders.append({
+                'session': session,
+                'hours_until': hours,
+                'is_mentor': session['mentor_id'] == user['id']
+            })
+    
+    return sorted(reminders, key=lambda x: x['hours_until'])
+
+@api_router.post('/ai/chat')
+async def ai_chat(chat_msg: ChatMessage, user=Depends(get_current_user)):
+    session_id = chat_msg.session_id or f"chat_{user['id']}"
+    
+    chat = LlmChat(
+        api_key=os.environ.get('EMERGENT_LLM_KEY'),
+        session_id=session_id,
+        system_message="You are M² AI Assistant, a friendly learning companion. Help students with course questions, study tips, motivation, and learning strategies. Be concise, encouraging, and educational."
+    ).with_model("openai", "gpt-4o")
+    
+    user_msg = UserMessage(text=chat_msg.message)
+    
+    try:
+        response = await chat.send_message(user_msg)
+        
+        await db.chat_history.insert_one({
+            'id': str(uuid.uuid4()),
+            'user_id': user['id'],
+            'session_id': session_id,
+            'message': chat_msg.message,
+            'response': response,
+            'timestamp': datetime.now(timezone.utc).isoformat()
+        })
+        
+        return {'response': response, 'session_id': session_id}
+    except Exception as e:
+        logger.error(f"AI chat error: {e}")
+        return {'response': "I'm having trouble connecting right now. Please try again in a moment.", 'session_id': session_id}
+
+@api_router.get('/ai/chat/history')
+async def get_chat_history(session_id: str, user=Depends(get_current_user)):
+    history = await db.chat_history.find({
+        'user_id': user['id'],
+        'session_id': session_id
+    }, {'_id': 0}).sort('timestamp', 1).to_list(50)
+    return history
+
 app.include_router(api_router)
 
 app.add_middleware(
