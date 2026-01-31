@@ -176,7 +176,16 @@ const P2P = () => {
             <div className="space-y-4">
               {mentors.slice(0, 5).map((mentor, index) => (
                 <div key={mentor.id} className="glass-heavy rounded-2xl p-6" data-testid={`mentor-${mentor.id}`}>
-                  <h4 className="font-semibold text-slate-900 mb-2">{mentor.name}</h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold text-slate-900">{mentor.name}</h4>
+                    {mentor.mentor_rating && (
+                      <div className="flex items-center gap-1 text-amber-500">
+                        <Star className="w-4 h-4 fill-current" />
+                        <span className="text-sm font-semibold">{mentor.mentor_rating}</span>
+                        <span className="text-xs text-slate-500">({mentor.total_ratings})</span>
+                      </div>
+                    )}
+                  </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {mentor.skills_can_teach.map((skill, i) => (
                       <span key={i} className="bg-sky-100 text-sky-700 px-2 py-1 rounded-full text-xs font-medium">
