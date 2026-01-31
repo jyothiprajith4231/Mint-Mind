@@ -311,8 +311,16 @@ async def get_my_sessions(user=Depends(get_current_user)):
     }, {'_id': 0}).to_list(100)
     return sessions
 
+class DetailedRating(BaseModel):
+    session_id: str
+    overall_rating: int
+    punctuality: int
+    knowledge: int
+    helpfulness: int
+    feedback: Optional[str] = None
+
 @api_router.post('/p2p/sessions/rate')
-async def rate_session(rating: SessionRating, user=Depends(get_current_user)):
+async def rate_session(rating: DetailedRating, user=Depends(get_current_user)):
     session = await db.p2p_sessions.find_one({'id': rating.session_id}, {'_id': 0})
     if not session:
         raise HTTPException(status_code=404, detail='Session not found')
@@ -320,10 +328,31 @@ async def rate_session(rating: SessionRating, user=Depends(get_current_user)):
     if session['learner_id'] != user['id']:
         raise HTTPException(status_code=403, detail='Only learner can rate session')
     
+    rating_data = {
+        'overall_rating': rating.overall_rating,
+        'punctuality': rating.punctuality,
+        'knowledge': rating.knowledge,
+        'helpfulness': rating.helpfulness,
+        'feedback': rating.feedback,
+        'status': 'completed'
+    }
+    
     await db.p2p_sessions.update_one(
         {'id': rating.session_id},
-        {'$set': {'rating': rating.rating, 'feedback': rating.feedback, 'status': 'completed'}}
+        {'$set': rating_data}
     )
+    
+    mentor_sessions = await db.p2p_sessions.find({
+        'mentor_id': session['mentor_id'],
+        'status': 'completed'
+    }, {'_id': 0}).to_list(100)
+    
+    if mentor_sessions:
+        avg_rating = sum(s.get('overall_rating', 0) for s in mentor_sessions) / len(mentor_sessions)
+        await db.users.update_one(
+            {'id': session['mentor_id']},
+            {'$set': {'mentor_rating': round(avg_rating, 1), 'total_ratings': len(mentor_sessions)}}
+        )
     
     await db.users.update_one(
         {'id': session['learner_id']},
