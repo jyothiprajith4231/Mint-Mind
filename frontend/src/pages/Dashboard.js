@@ -14,7 +14,30 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
+    checkNotifications();
+    const interval = setInterval(checkNotifications, 300000); // Check every 5 minutes
+    return () => clearInterval(interval);
   }, []);
+
+  const checkNotifications = async () => {
+    try {
+      const res = await api.get('/reminders');
+      const urgentReminders = res.data.filter(r => r.hours_until <= 1);
+      
+      urgentReminders.forEach(reminder => {
+        const message = reminder.is_mentor 
+          ? `Teaching session "${reminder.session.skill}" starts in ${reminder.hours_until} hour${reminder.hours_until !== 1 ? 's' : ''}!`
+          : `Learning session "${reminder.session.skill}" starts in ${reminder.hours_until} hour${reminder.hours_until !== 1 ? 's' : ''}!`;
+        
+        toast.info(message, {
+          duration: 8000,
+          icon: '🔔'
+        });
+      });
+    } catch (error) {
+      console.error('Failed to check notifications');
+    }
+  };
 
   const fetchData = async () => {
     try {
