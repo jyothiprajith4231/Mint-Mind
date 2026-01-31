@@ -134,13 +134,6 @@ class ChatMessage(BaseModel):
     message: str
     session_id: Optional[str] = None
 
-class NotificationSettings(BaseModel):
-    session_reminders: bool = True
-    quiz_achievements: bool = True
-    coin_earned: bool = True
-    ai_tips: bool = True
-    urgent_only: bool = False
-
 @api_router.get('/notifications/settings')
 async def get_notification_settings(user=Depends(get_current_user)):
     settings = await db.notification_settings.find_one({'user_id': user['id']}, {'_id': 0})
