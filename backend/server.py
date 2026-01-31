@@ -130,6 +130,45 @@ class NotificationSettings(BaseModel):
 class RewardRedemption(BaseModel):
     reward_id: str
 
+class ChatMessage(BaseModel):
+    message: str
+    session_id: Optional[str] = None
+
+class NotificationSettings(BaseModel):
+    session_reminders: bool = True
+    quiz_achievements: bool = True
+    coin_earned: bool = True
+    ai_tips: bool = True
+    urgent_only: bool = False
+
+@api_router.get('/notifications/settings')
+async def get_notification_settings(user=Depends(get_current_user)):
+    settings = await db.notification_settings.find_one({'user_id': user['id']}, {'_id': 0})
+    if not settings:
+        default_settings = {
+            'user_id': user['id'],
+            'session_reminders': True,
+            'quiz_achievements': True,
+            'coin_earned': True,
+            'ai_tips': True,
+            'urgent_only': False
+        }
+        await db.notification_settings.insert_one(default_settings)
+        return {k: v for k, v in default_settings.items() if k != 'user_id'}
+    return {k: v for k, v in settings.items() if k != 'user_id'}
+
+@api_router.post('/notifications/settings')
+async def update_notification_settings(settings: NotificationSettings, user=Depends(get_current_user)):
+    settings_dict = settings.model_dump()
+    settings_dict['user_id'] = user['id']
+    
+    await db.notification_settings.update_one(
+        {'user_id': user['id']},
+        {'$set': settings_dict},
+        upsert=True
+    )
+    return {'message': 'Settings updated successfully'}
+
 @api_router.post('/auth/signup')
 async def signup(req: SignupRequest):
     existing = await db.users.find_one({'email': req.email}, {'_id': 0})
