@@ -77,10 +77,17 @@ const P2P = () => {
 
   const handleRateSession = async () => {
     try {
-      const res = await api.post('/p2p/sessions/rate', ratingData);
+      await api.post('/p2p/sessions/rate', ratingData);
       toast.success(`Session rated! Earned ${res.data.coins_earned} coins!`);
       setShowRateSession(false);
-      setRatingData({ session_id: '', rating: 5, feedback: '' });
+      setRatingData({
+        session_id: '',
+        overall_rating: 5,
+        punctuality: 5,
+        knowledge: 5,
+        helpfulness: 5,
+        feedback: ''
+      });
       await fetchData();
     } catch (error) {
       toast.error('Failed to rate session');
