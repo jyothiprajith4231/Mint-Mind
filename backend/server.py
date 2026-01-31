@@ -306,12 +306,15 @@ async def book_session(booking: SessionBooking, user=Depends(get_current_user)):
         'skill': booking.skill,
         'scheduled_at': booking.scheduled_at,
         'status': 'scheduled',
-        'rating': None,
+        'overall_rating': None,
+        'punctuality': None,
+        'knowledge': None,
+        'helpfulness': None,
         'feedback': None,
         'created_at': datetime.now(timezone.utc).isoformat()
     }
     await db.p2p_sessions.insert_one(session)
-    return session
+    return {k: v for k, v in session.items() if k != '_id'}
 
 @api_router.get('/p2p/sessions/my')
 async def get_my_sessions(user=Depends(get_current_user)):
