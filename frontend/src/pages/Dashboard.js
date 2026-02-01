@@ -167,14 +167,49 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="md:col-span-4 glass-heavy rounded-3xl p-8"
+            className="md:col-span-4 glass-heavy rounded-3xl p-8 relative overflow-hidden"
             data-testid="ai-recommendations-card"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <TrendingUp className="w-6 h-6 text-violet-600" />
-              <h3 className="text-xl font-semibold text-slate-900">AI Recommendations</h3>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-400/20 to-transparent rounded-full blur-2xl" />
+            <div className="relative">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900">AI Recommendations</h3>
+              </div>
+              {recommendations ? (
+                <div className="space-y-4">
+                  {recommendations.split('\n').filter(line => line.trim()).map((line, i) => {
+                    const isHeading = line.match(/^\*?\*?[A-Z][^:]*:/) || line.match(/^\d+\./);
+                    const cleanLine = line.replace(/^\*?\*?/, '').replace(/\*?\*?$/, '').trim();
+                    
+                    return (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 * i }}
+                        className={isHeading ? 'font-semibold text-slate-900' : 'text-slate-700 pl-4'}
+                      >
+                        {isHeading ? (
+                          <div className="flex items-start gap-2">
+                            <span className="text-violet-600">→</span>
+                            <span>{cleanLine}</span>
+                          </div>
+                        ) : (
+                          <p className="leading-relaxed">{cleanLine}</p>
+                        )}
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-pulse text-slate-400">Loading recommendations...</div>
+                </div>
+              )}
             </div>
-            <p className="text-slate-700 leading-relaxed">{recommendations || 'Loading recommendations...'}</p>
           </motion.div>
         </div>
       </div>
