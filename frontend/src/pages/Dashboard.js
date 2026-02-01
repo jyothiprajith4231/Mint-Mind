@@ -179,29 +179,67 @@ const Dashboard = () => {
                 <h3 className="text-xl font-semibold text-slate-900">AI Recommendations</h3>
               </div>
               {recommendations ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {recommendations.split('\n').filter(line => line.trim()).map((line, i) => {
-                    const isHeading = line.match(/^\*?\*?[A-Z][^:]*:/) || line.match(/^\d+\./);
-                    const cleanLine = line.replace(/^\*?\*?/, '').replace(/\*?\*?$/, '').trim();
+                    // Remove markdown symbols for cleaner display
+                    let cleanLine = line.replace(/\*\*/g, '').replace(/###/g, '').trim();
                     
-                    return (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 * i }}
-                        className={isHeading ? 'font-semibold text-slate-900' : 'text-slate-700 pl-4'}
-                      >
-                        {isHeading ? (
-                          <div className="flex items-start gap-2">
-                            <span className="text-violet-600">→</span>
-                            <span>{cleanLine}</span>
+                    // Check if it's a numbered heading (1., 2., etc.)
+                    const isNumberedHeading = cleanLine.match(/^(\d+)\.\s*(.+)$/);
+                    
+                    // Check if it's a bullet point
+                    const isBullet = cleanLine.startsWith('-');
+                    
+                    if (isNumberedHeading) {
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.05 * i }}
+                          className="flex items-start gap-3 mt-4"
+                        >
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center flex-shrink-0 mt-1">
+                            <span className="text-white text-sm font-bold">{isNumberedHeading[1]}</span>
                           </div>
-                        ) : (
-                          <p className="leading-relaxed">{cleanLine}</p>
-                        )}
-                      </motion.div>
-                    );
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-slate-900 text-base">{isNumberedHeading[2]}</h4>
+                          </div>
+                        </motion.div>
+                      );
+                    }
+                    
+                    if (isBullet) {
+                      const bulletText = cleanLine.replace(/^-\s*/, '');
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.05 * i }}
+                          className="flex items-start gap-2 pl-10"
+                        >
+                          <span className="text-violet-500 mt-1.5">•</span>
+                          <p className="text-slate-700 text-sm leading-relaxed">{bulletText}</p>
+                        </motion.div>
+                      );
+                    }
+                    
+                    // Regular text
+                    if (cleanLine) {
+                      return (
+                        <motion.p
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.05 * i }}
+                          className="text-slate-700 text-sm leading-relaxed"
+                        >
+                          {cleanLine}
+                        </motion.p>
+                      );
+                    }
+                    return null;
                   })}
                 </div>
               ) : (
