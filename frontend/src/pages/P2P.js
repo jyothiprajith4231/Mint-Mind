@@ -374,6 +374,46 @@ const P2P = () => {
         </DialogContent>
       </Dialog>
 
+      <Dialog open={showEditProfile} onOpenChange={setShowEditProfile}>
+        <DialogContent className="glass-heavy max-w-md" data-testid="edit-mentor-profile-dialog">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-slate-900">Edit Mentor Profile</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="mentor-description" className="text-slate-700 font-medium">About You</Label>
+              <textarea
+                id="mentor-description"
+                value={mentorProfile.mentor_description}
+                onChange={(e) => setMentorProfile({ ...mentorProfile, mentor_description: e.target.value })}
+                className="mt-2 w-full bg-white/50 border-slate-200 focus:border-violet-500 focus:ring-violet-500/20 rounded-xl p-3 min-h-[100px] resize-none"
+                placeholder="Describe your expertise, experience, and teaching style..."
+                data-testid="mentor-description-input"
+              />
+            </div>
+            <div>
+              <Label htmlFor="mentor-link" className="text-slate-700 font-medium">Portfolio/Profile Link</Label>
+              <Input
+                id="mentor-link"
+                type="url"
+                value={mentorProfile.mentor_link}
+                onChange={(e) => setMentorProfile({ ...mentorProfile, mentor_link: e.target.value })}
+                className="mt-2 bg-white/50 border-slate-200 focus:border-violet-500 focus:ring-violet-500/20 rounded-xl h-12"
+                placeholder="https://linkedin.com/in/yourprofile"
+                data-testid="mentor-link-input"
+              />
+            </div>
+            <button
+              onClick={handleUpdateMentorProfile}
+              className="w-full bg-gradient-to-r from-violet-500 to-violet-600 text-white rounded-full px-6 py-3 font-medium"
+              data-testid="mentor-profile-submit-btn"
+            >
+              Update Profile
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={showBookSession} onOpenChange={setShowBookSession}>
         <DialogContent className="glass-heavy" data-testid="book-session-dialog">
           <DialogHeader>
