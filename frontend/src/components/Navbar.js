@@ -48,23 +48,35 @@ const Navbar = ({ user }) => {
           </div>
 
           <div className="flex items-center gap-4">
+            <button
+              onClick={toggleTheme}
+              className="glass-heavy rounded-full p-2 hover:bg-white/60 dark:hover:bg-slate-700/60 transition-all"
+              data-testid="theme-toggle-btn"
+              title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+            >
+              {theme === 'light' ? (
+                <Moon className="w-5 h-5 text-slate-700" />
+              ) : (
+                <Sun className="w-5 h-5 text-slate-300" />
+              )}
+            </button>
             <div className="flex items-center gap-2 glass-heavy rounded-full px-4 py-2" data-testid="navbar-coins">
               <Coins className="w-4 h-4 text-amber-500" />
-              <span className="font-semibold text-slate-900">{user?.coins || 0}</span>
+              <span className="font-semibold text-slate-900 dark:text-slate-100">{user?.coins || 0}</span>
             </div>
             <button
               onClick={() => navigate('/profile')}
-              className="glass-heavy rounded-full p-2 hover:bg-white/60 transition-all"
+              className="glass-heavy rounded-full p-2 hover:bg-white/60 dark:hover:bg-slate-700/60 transition-all"
               data-testid="navbar-profile-btn"
             >
-              <User className="w-5 h-5 text-slate-700" />
+              <User className="w-5 h-5 text-slate-700 dark:text-slate-300" />
             </button>
             <button
               onClick={handleLogout}
-              className="glass-heavy rounded-full p-2 hover:bg-white/60 transition-all"
+              className="glass-heavy rounded-full p-2 hover:bg-white/60 dark:hover:bg-slate-700/60 transition-all"
               data-testid="navbar-logout-btn"
             >
-              <LogOut className="w-5 h-5 text-slate-700" />
+              <LogOut className="w-5 h-5 text-slate-700 dark:text-slate-300" />
             </button>
           </div>
         </div>
