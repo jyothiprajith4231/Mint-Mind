@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import api from '@/utils/api';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
-import { Users, Plus, Calendar, Star } from 'lucide-react';
+import { Users, Plus, Calendar, Star, Edit } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
