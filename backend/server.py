@@ -322,6 +322,21 @@ async def add_skill(skill_req: SkillRequest, user=Depends(get_current_user)):
     )
     return {'message': 'Skill added successfully'}
 
+@api_router.post('/mentor/profile')
+async def update_mentor_profile(profile: MentorProfileUpdate, user=Depends(get_current_user)):
+    update_data = {}
+    if profile.mentor_description is not None:
+        update_data['mentor_description'] = profile.mentor_description
+    if profile.mentor_link is not None:
+        update_data['mentor_link'] = profile.mentor_link
+    
+    if update_data:
+        await db.users.update_one(
+            {'id': user['id']},
+            {'$set': update_data}
+        )
+    return {'message': 'Mentor profile updated successfully'}
+
 @api_router.get('/p2p/mentors')
 async def get_mentors(skill: Optional[str] = None):
     query = {}
