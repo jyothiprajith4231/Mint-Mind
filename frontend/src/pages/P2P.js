@@ -46,6 +46,11 @@ const P2P = () => {
       setUser(userRes.data);
       setMentors(mentorsRes.data);
       setSessions(sessionsRes.data);
+      
+      setMentorProfile({
+        mentor_description: userRes.data.mentor_description || '',
+        mentor_link: userRes.data.mentor_link || ''
+      });
     } catch (error) {
       toast.error('Failed to load P2P data');
     }
