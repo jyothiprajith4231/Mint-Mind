@@ -161,13 +161,23 @@ const P2P = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-slate-900">My Skills</h3>
-              <button
-                onClick={() => setShowAddSkill(true)}
-                className="glass-heavy rounded-full p-2 hover:bg-white/60 transition-all"
-                data-testid="add-skill-btn"
-              >
-                <Plus className="w-5 h-5 text-violet-600" />
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowEditProfile(true)}
+                  className="glass-heavy rounded-full p-2 hover:bg-white/60 transition-all"
+                  data-testid="edit-mentor-profile-btn"
+                  title="Edit mentor profile"
+                >
+                  <Edit className="w-4 h-4 text-violet-600" />
+                </button>
+                <button
+                  onClick={() => setShowAddSkill(true)}
+                  className="glass-heavy rounded-full p-2 hover:bg-white/60 transition-all"
+                  data-testid="add-skill-btn"
+                >
+                  <Plus className="w-5 h-5 text-violet-600" />
+                </button>
+              </div>
             </div>
             {user.skills_can_teach.length === 0 ? (
               <p className="text-slate-600 text-sm">No skills added yet</p>
@@ -178,6 +188,23 @@ const P2P = () => {
                     {skill}
                   </span>
                 ))}
+              </div>
+            )}
+            {(user.mentor_description || user.mentor_link) && (
+              <div className="mt-4 pt-4 border-t border-white/30">
+                {user.mentor_description && (
+                  <p className="text-sm text-slate-700 mb-2">{user.mentor_description}</p>
+                )}
+                {user.mentor_link && (
+                  <a 
+                    href={user.mentor_link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-violet-600 hover:text-violet-700 underline"
+                  >
+                    View Portfolio/Profile →
+                  </a>
+                )}
               </div>
             )}
           </motion.div>
