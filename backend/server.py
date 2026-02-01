@@ -134,6 +134,12 @@ class NotificationSettings(BaseModel):
 class RewardRedemption(BaseModel):
     reward_id: str
 
+class OrderCreate(BaseModel):
+    reward_id: str
+    reward_name: str
+    coin_cost: int
+    shipping_info: Dict
+
 class ChatMessage(BaseModel):
     message: str
     session_id: Optional[str] = None
