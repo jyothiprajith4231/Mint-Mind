@@ -452,25 +452,40 @@ async def redeem_reward(redemption: RewardRedemption, user=Depends(get_current_u
 async def get_ai_recommendations(user=Depends(get_current_user)):
     enrollments = await db.enrollments.find({'user_id': user['id']}, {'_id': 0}).to_list(100)
     completed_courses = [e for e in enrollments if e['progress'] >= 100]
+    in_progress = [e for e in enrollments if 0 < e['progress'] < 100]
     
-    all_courses = await db.courses.find({}, {'_id': 0, 'title': 1}).to_list(100)
-    completed_titles = [c['course_id'] for c in completed_courses]
+    all_courses = await db.courses.find({}, {'_id': 0, 'title': 1, 'description': 1}).to_list(100)
+    enrolled_ids = [e['course_id'] for e in enrollments]
+    available_courses = [c for c in all_courses if c.get('id') not in enrolled_ids]
+    
+    course_titles = ', '.join([c['title'] for c in available_courses[:5]])
     
     chat = LlmChat(
         api_key=os.environ.get('EMERGENT_LLM_KEY'),
         session_id=f"recommendations_{user['id']}",
-        system_message="You are an AI learning advisor. Recommend 3 courses based on user profile."
+        system_message="You are an AI learning advisor. Provide personalized, encouraging course recommendations. Format your response with clear sections and bullet points."
     ).with_model("openai", "gpt-4o")
     
-    user_msg = UserMessage(
-        text=f"User has completed {len(completed_courses)} courses. Skills they teach: {', '.join(user['skills_can_teach']) if user['skills_can_teach'] else 'None'}. Recommend 3 relevant learning paths in a brief, encouraging way."
-    )
+    context = f"""
+User Profile:
+- Completed courses: {len(completed_courses)}
+- Courses in progress: {len(in_progress)}
+- Skills they can teach: {', '.join(user['skills_can_teach']) if user['skills_can_teach'] else 'None yet'}
+- Total coins earned: {user.get('coins', 0)}
+
+Available courses: {course_titles}
+
+Provide 3 personalized course recommendations with brief explanations. Keep response under 150 words, formatted with clear headings and brief descriptions.
+"""
+    
+    user_msg = UserMessage(text=context)
     
     try:
         response = await chat.send_message(user_msg)
         return {'recommendations': response}
     except Exception as e:
-        return {'recommendations': 'Keep learning! Explore our course catalog to discover new skills.'}
+        logger.error(f"AI recommendations error: {e}")
+        return {'recommendations': 'Keep exploring! Check out our course catalog to discover new skills and earn more coins.'}
 
 @api_router.get('/reminders')
 async def get_reminders(user=Depends(get_current_user)):
