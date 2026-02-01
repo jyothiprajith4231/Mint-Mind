@@ -29,26 +29,17 @@ const Store = () => {
     }
   };
 
-  const handleRedeem = async (rewardId, coinCost) => {
-    if (user.coins < coinCost) {
+  const handleRedeem = async (reward) => {
+    if (user.coins < reward.coin_cost) {
       toast.error('Insufficient coins!', {
-        description: `You need ${coinCost - user.coins} more coins`,
+        description: `You need ${reward.coin_cost - user.coins} more coins`,
         duration: 4000
       });
       return;
     }
 
-    try {
-      await api.post('/rewards/redeem', { reward_id: rewardId });
-      toast.success('Reward redeemed successfully!', {
-        description: 'Your reward will be delivered soon!',
-        duration: 5000,
-        icon: '🎁'
-      });
-      await fetchData();
-    } catch (error) {
-      toast.error('Failed to redeem reward');
-    }
+    // Navigate to checkout page with reward data
+    navigate('/checkout', { state: { reward } });
   };
 
   if (loading) return <div className="min-h-screen ambient-bg flex items-center justify-center"><div className="text-2xl text-slate-600">Loading...</div></div>;
