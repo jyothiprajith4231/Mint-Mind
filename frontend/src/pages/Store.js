@@ -106,12 +106,12 @@ const Store = () => {
                   <p className="text-slate-600 mb-4 text-sm">{reward.description}</p>
                   <p className="text-xs text-slate-500 mb-4">Stock: {reward.stock}</p>
                   <button
-                    onClick={() => handleRedeem(reward.id, reward.coin_cost)}
+                    onClick={() => handleRedeem(reward)}
                     disabled={!canAfford}
                     className="w-full bg-gradient-to-r from-violet-500 to-violet-600 text-white rounded-full px-6 py-3 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid={`redeem-btn-${reward.id}`}
                   >
-                    {canAfford ? 'Redeem' : 'Not Enough Coins'}
+                    {canAfford ? 'Redeem Now' : 'Not Enough Coins'}
                   </button>
                 </div>
               </motion.div>
