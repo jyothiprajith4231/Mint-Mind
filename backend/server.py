@@ -102,6 +102,10 @@ class QuizSubmission(BaseModel):
 class SkillRequest(BaseModel):
     skill: str
 
+class MentorProfileUpdate(BaseModel):
+    mentor_description: Optional[str] = None
+    mentor_link: Optional[str] = None
+
 class SessionBooking(BaseModel):
     mentor_id: str
     skill: str
