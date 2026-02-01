@@ -27,7 +27,7 @@ const Navbar = ({ user }) => {
         <div className="flex items-center justify-between">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="text-2xl font-bold text-slate-900 cursor-pointer"
+            className="text-2xl font-bold text-slate-900 dark:text-slate-100 cursor-pointer"
             onClick={() => navigate('/dashboard')}
             data-testid="navbar-logo"
           >
@@ -39,7 +39,7 @@ const Navbar = ({ user }) => {
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className="text-slate-700 hover:text-violet-600 font-medium transition-colors"
+                className="text-slate-700 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 font-medium transition-colors"
                 data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
               >
                 {item.label}
