@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import api from '@/utils/api';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
-import { Package, MapPin, Phone, User, Mail, CheckCircle } from 'lucide-react';
+import { Package, MapPin, Phone, User, Mail, CheckCircle, Coins } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
