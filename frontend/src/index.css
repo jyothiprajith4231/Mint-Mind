@@ -118,10 +118,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 [data-theme="dark"] .glass-heavy {
-  background: rgba(30, 41, 59, 0.6);
+  background: rgba(30, 41, 59, 0.7);
   backdrop-filter: blur(24px);
-  border: 1px solid rgba(100, 116, 139, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .glass-light {
@@ -131,9 +131,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 [data-theme="dark"] .glass-light {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 41, 59, 0.5);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(100, 116, 139, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.15);
 }
 
 .ambient-bg {
@@ -142,4 +142,20 @@ h1, h2, h3, h4, h5, h6 {
 
 [data-theme="dark"] .ambient-bg {
   background: radial-gradient(ellipse at top right, rgb(30 41 59), rgb(15 23 42), rgb(15 23 42));
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: rgb(30 41 59);
+}
+
+[data-theme="dark"] .bg-slate-50 {
+  background-color: rgb(30 41 59);
+}
+
+[data-theme="dark"] .bg-slate-100 {
+  background-color: rgb(51 65 85);
+}
+
+[data-theme="dark"] .bg-slate-200 {
+  background-color: rgb(71 85 105);
 }
