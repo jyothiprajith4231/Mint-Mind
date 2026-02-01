@@ -150,17 +150,35 @@ async def get_notification_settings(user=Depends(get_current_user)):
         return {k: v for k, v in default_settings.items() if k != 'user_id' and k != '_id'}
     return {k: v for k, v in settings.items() if k != 'user_id' and k != '_id'}
 
-@api_router.post('/notifications/settings')
-async def update_notification_settings(settings: NotificationSettings, user=Depends(get_current_user)):
-    settings_dict = settings.model_dump()
-    settings_dict['user_id'] = user['id']
-    
-    await db.notification_settings.update_one(
+@api_router.get('/notifications/history')
+async def get_notification_history(user=Depends(get_current_user)):
+    history = await db.notification_history.find(
         {'user_id': user['id']},
-        {'$set': settings_dict},
-        upsert=True
+        {'_id': 0}
+    ).sort('created_at', -1).limit(50).to_list(50)
+    return history
+
+@api_router.post('/notifications/{notification_id}/read')
+async def mark_notification_read(notification_id: str, user=Depends(get_current_user)):
+    await db.notification_history.update_one(
+        {'id': notification_id, 'user_id': user['id']},
+        {'$set': {'read': True}}
     )
-    return {'message': 'Settings updated successfully'}
+    return {'message': 'Notification marked as read'}
+
+@api_router.post('/notifications/create')
+async def create_notification(user_id: str, message: str, icon: str = '🔔', notification_type: str = 'info'):
+    notification = {
+        'id': str(uuid.uuid4()),
+        'user_id': user_id,
+        'message': message,
+        'icon': icon,
+        'type': notification_type,
+        'read': False,
+        'created_at': datetime.now(timezone.utc).isoformat()
+    }
+    await db.notification_history.insert_one(notification)
+    return notification
 
 @api_router.post('/auth/signup')
 async def signup(req: SignupRequest):
