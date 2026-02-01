@@ -254,6 +254,11 @@ const P2P = () => {
                       </div>
                     )}
                   </div>
+                  
+                  {mentor.mentor_description && (
+                    <p className="text-sm text-slate-600 mb-3 line-clamp-2">{mentor.mentor_description}</p>
+                  )}
+                  
                   <div className="flex flex-wrap gap-2 mb-4">
                     {mentor.skills_can_teach.map((skill, i) => (
                       <span key={i} className="bg-sky-100 text-sky-700 px-2 py-1 rounded-full text-xs font-medium">
@@ -261,16 +266,29 @@ const P2P = () => {
                       </span>
                     ))}
                   </div>
-                  <button
-                    onClick={() => {
-                      setSelectedMentor(mentor);
-                      setShowBookSession(true);
-                    }}
-                    className="bg-gradient-to-r from-violet-500 to-violet-600 text-white rounded-full px-4 py-2 text-sm font-medium"
-                    data-testid={`book-session-${mentor.id}`}
-                  >
-                    Book Session
-                  </button>
+                  
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setSelectedMentor(mentor);
+                        setShowBookSession(true);
+                      }}
+                      className="bg-gradient-to-r from-violet-500 to-violet-600 text-white rounded-full px-4 py-2 text-sm font-medium flex-1"
+                      data-testid={`book-session-${mentor.id}`}
+                    >
+                      Book Session
+                    </button>
+                    {mentor.mentor_link && (
+                      <a
+                        href={mentor.mentor_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="glass-heavy rounded-full px-4 py-2 text-sm font-medium text-violet-600 hover:bg-white/60 transition-all"
+                      >
+                        View Profile
+                      </a>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
