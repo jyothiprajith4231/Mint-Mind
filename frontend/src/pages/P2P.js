@@ -69,6 +69,20 @@ const P2P = () => {
     }
   };
 
+  const handleUpdateMentorProfile = async () => {
+    try {
+      await api.post('/mentor/profile', mentorProfile);
+      toast.success('Mentor profile updated!', {
+        description: 'Your profile is now more visible to learners',
+        duration: 4000
+      });
+      setShowEditProfile(false);
+      await fetchData();
+    } catch (error) {
+      toast.error('Failed to update profile');
+    }
+  };
+
   const handleBookSession = async () => {
     try {
       await api.post('/p2p/sessions/book', {
