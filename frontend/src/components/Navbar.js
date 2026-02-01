@@ -1,7 +1,6 @@
 import { LogOut, User, Coins } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Reminders from './Reminders';
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
