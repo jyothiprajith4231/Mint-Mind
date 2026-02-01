@@ -1,9 +1,11 @@
-import { LogOut, User, Coins } from 'lucide-react';
+import { LogOut, User, Coins, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
