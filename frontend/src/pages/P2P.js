@@ -14,6 +14,7 @@ const P2P = () => {
   const [sessions, setSessions] = useState([]);
   const [showAddSkill, setShowAddSkill] = useState(false);
   const [showBookSession, setShowBookSession] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const [newSkill, setNewSkill] = useState('');
   const [selectedMentor, setSelectedMentor] = useState(null);
   const [bookingData, setBookingData] = useState({ skill: '', scheduled_at: '' });
@@ -25,6 +26,10 @@ const P2P = () => {
     knowledge: 5,
     helpfulness: 5,
     feedback: ''
+  });
+  const [mentorProfile, setMentorProfile] = useState({
+    mentor_description: '',
+    mentor_link: ''
   });
 
   useEffect(() => {
