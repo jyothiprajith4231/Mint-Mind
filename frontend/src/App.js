@@ -11,6 +11,7 @@ import CourseDetail from '@/pages/CourseDetail';
 import P2P from '@/pages/P2P';
 import Leaderboard from '@/pages/Leaderboard';
 import Store from '@/pages/Store';
+import OrderCheckout from '@/pages/OrderCheckout';
 import Profile from '@/pages/Profile';
 import NotificationSettings from '@/pages/NotificationSettings';
 
