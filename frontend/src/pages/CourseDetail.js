@@ -48,7 +48,18 @@ const CourseDetail = () => {
   };
 
   const handleEnroll = async () => {
-    try {\n      const res = await api.post(`/courses/${id}/enroll`);\n      setEnrollment(res.data);\n      toast.success('Enrolled successfully!', {\n        description: 'Start learning to earn coins!',\n        duration: 4000,\n        icon: '📚'\n      });\n    } catch (error) {\n      toast.error('Enrollment failed');\n    }\n  };
+    try {
+      const res = await api.post(`/courses/${id}/enroll`);
+      setEnrollment(res.data);
+      toast.success('Enrolled successfully!', {
+        description: 'Start learning to earn coins!',
+        duration: 4000,
+        icon: '📚'
+      });
+    } catch (error) {
+      toast.error('Enrollment failed');
+    }
+  };
 
   const handleModuleClick = (module) => {
     setActiveModule(module);
