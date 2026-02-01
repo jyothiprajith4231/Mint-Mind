@@ -458,20 +458,54 @@ async def redeem_reward(redemption: RewardRedemption, user=Depends(get_current_u
     if user['coins'] < reward['coin_cost']:
         raise HTTPException(status_code=400, detail='Insufficient coins')
     
+    return {'message': 'Proceed to checkout', 'reward': reward}
+
+@api_router.post('/orders/create')
+async def create_order(order: OrderCreate, user=Depends(get_current_user)):
+    reward = await db.rewards.find_one({'id': order.reward_id}, {'_id': 0})
+    if not reward:
+        raise HTTPException(status_code=404, detail='Reward not found')
+    
+    if user['coins'] < order.coin_cost:
+        raise HTTPException(status_code=400, detail='Insufficient coins')
+    
+    order_id = f"ORD-{str(uuid.uuid4())[:8].upper()}"
+    
+    order_data = {
+        'id': str(uuid.uuid4()),
+        'order_id': order_id,
+        'user_id': user['id'],
+        'reward_id': order.reward_id,
+        'reward_name': order.reward_name,
+        'reward_image': reward.get('image'),
+        'coin_cost': order.coin_cost,
+        'shipping_info': order.shipping_info,
+        'status': 'pending',
+        'created_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.orders.insert_one(order_data)
+    
     await db.users.update_one(
         {'id': user['id']},
-        {'$inc': {'coins': -reward['coin_cost']}}
+        {'$inc': {'coins': -order.coin_cost}}
     )
     
     user_reward = {
         'id': str(uuid.uuid4()),
         'user_id': user['id'],
-        'reward_id': reward['id'],
+        'reward_id': order.reward_id,
+        'order_id': order_id,
         'redeemed_at': datetime.now(timezone.utc).isoformat()
     }
     await db.user_rewards.insert_one(user_reward)
     
-    return {'message': 'Reward redeemed successfully'}
+    return {'message': 'Order placed successfully', 'order_id': order_id}
+
+@api_router.get('/orders/my')
+async def get_my_orders(user=Depends(get_current_user)):
+    orders = await db.orders.find({'user_id': user['id']}, {'_id': 0}).sort('created_at', -1).to_list(100)
+    return orders
 
 @api_router.get('/ai/recommendations')
 async def get_ai_recommendations(user=Depends(get_current_user)):
